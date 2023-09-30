@@ -1,0 +1,65 @@
+{
+	"extId": "627e2728c355c90a8fb59353",
+	"appName": "Meta Man",
+	"loginURL": "https://app.kyubi.io/api/end-user/login",
+	"logoutURL": null,
+	"forgotPassURL": "https://app.kyubi.io/api/end-user/generate-password-token",
+	"changePassURL": "https://app.kyubi.io/api/end-user/update-password",
+	"checkUserStatusURL": "https://app.kyubi.io/api/end-user/get-status",
+	"youtubeLink": null,
+	"youtubeLink2": null,
+	"signupURL": "",
+	"installedURL": null,
+	"uninstalledURL": null,
+
+	"description": {
+		"short_description": "Let Story Drive helps you to connect and engage with your leads using Facebook stories",
+		"long_description": "Let Story Drive helps you to connect and engage with your leads using Facebook stories"
+	},
+	"logo": {
+		"small_icon": "./images/logo-16.png",
+		"medium_icon": "./images/logo-48.png",
+		"large_icon": "./images/logo-48.png",
+		"primary_logo": "./logo/metaman.png",
+		"secondary_logo": "./images/logo-inner.png",
+		"background_image": ""
+	},
+	"loader": {
+		"preLoader": "./images/Loader.gif",
+		"replyLoader": null,
+		"customLoader": null
+	},
+	"footer": {
+		"poweredBy": {
+			"label": "Tier5",
+			"url": "https://tier5.in/",
+			"willBeDisplayed": true
+		},
+		"partnership": {
+			"label": "Tier5 Partnership",
+			"url": "https://partner.tier5.us?utm_source=",
+			"willBeDisplayed": true
+		},
+		"chatSupport": {
+			"label": "Chat Support",
+			"url": "https://www.messenger.com/tier5development",
+			"willBeDisplayed": true
+		},
+		"officialGroup": {
+			"label": "Official Support Group",
+			"url": "https://www.facebook.com/groups/",
+			"willBeDisplayed": true
+		},
+		"showFooter": true
+	},
+	"isLive": false,
+	"advertisementTextHtml": null,
+	"mailTo": "support@tier5.us",
+	"publicVapidKey": "BLwDt19XLTrlqs75r_5g4n9avdGMO99bOnM0utVfqMLJ_rmzNqE6a2G4WXwaV49LwjKZ18LpXo8drSRP7Geo13s",
+	"clearSubscriptionObjectURL": "https://dev.kyubi.io/api/clear-subscription-object",
+	"registerNotificationView": "https://dev.kyubi.io/api/notification-view",
+	"upgradeUri": null,
+	"trainingVideos": null,
+	"appBaseBackendUrl": "https://letstorydrive.io",
+	"lamdaApiLink": ""
+}

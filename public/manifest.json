@@ -1,0 +1,59 @@
+{
+	"manifest_version": 3,
+	"name": "MetaMan",
+	"version": "1.0",
+	"description": "A Chrome extension that opens a full-page HTML.",
+	"permissions": [],
+	"action": {
+	  "default_popup": "",
+	  "default_icon": {
+		"16": "images/logo-16.png",
+		"48": "images/logo-48.png",
+		"128": "images/logo-128.png"
+	  }
+	},
+	"icons": {
+	  "16": "images/logo-16.png",
+	  "48": "images/logo-48.png",
+	  "128": "images/logo-128.png"
+	},
+	"content_scripts": [
+		{
+			"matches": ["*://*/*", "*://facebook.com/*"],
+			"js": ["js/common_lsd.js"],
+			"css": ["assets/css/content.css"],
+			"run_at": "document_end"
+		}
+	],
+	"externally_connectable": {
+		"matches": ["http://*/*"]
+	},
+	"permissions": [
+		"storage",
+		"alarms",
+		"cookies",
+		"scripting",
+		"declarativeNetRequest"
+	],
+	"host_permissions": ["*://*.facebook.com/*", "*://facebook.com/*"],
+	"declarative_net_request": {
+		"rule_resources": [
+			{
+				"id": "ruleset_1",
+				"enabled": true,
+				"path": "rules.json"
+			}
+		]
+	},
+
+	"background": {
+		"service_worker": "js/service_worker.js"
+	},
+
+	"web_accessible_resources": [
+		{
+			"resources": ["lib/jquery.min.js","*.png", "*.svg", "*.gif", "*.jpg"],
+			"matches": ["*://*/*"]
+		}
+	]
+}
