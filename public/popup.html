@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>API Tester</title>
+		<link rel="stylesheet" href="./assets/css/jsoneditor.min.css" />
+        <script src="lib/jsoneditor.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -100,9 +102,12 @@
             margin-bottom: 10px;
         }
     </style>
+
 </head>
 <body>
+
     <div class="container">
+        
         <h1>MetaMan the API Tester</h1>
         <div id="user-profile">
             <img id="profile-picture" src="" alt="Profile Picture">
@@ -123,13 +128,21 @@
                 <option value="PUT">PUT</option>
                 <option value="DELETE">DELETE</option>
             </select><br><br>
+            <!-- JSONEditor container for Request Payload -->
+            <!-- <label for="request-payload">Request Payload (JSON):</label>
+            <div id="request-payload-editor" style="height: 200px;"></div>
+            <span class="error-message" id="payload-error"></span><br> -->
 
+            <!-- JSONEditor container for Request Headers -->
+            <!-- <label for="request-headers">Request Headers (JSON):</label>
+            <div id="request-headers-editor" style="height: 100px;"></div><br> -->
             <label for="request-payload">Request Payload (JSON):</label>
-            <textarea id="request-payload" rows="6" placeholder="Enter JSON payload"></textarea><br>
-            <span class="error-message" id="payload-error"></span><br>
+            <div id="jsoneditor" style="height: 100px;"></div>
+            <!-- <textarea id="request-payload" rows="6" placeholder="Enter JSON payload"></textarea><br>
+            <span class="error-message" id="payload-error"></span><br> -->
 
             <label for="request-headers">Request Headers (JSON):</label>
-            <textarea id="request-headers" rows="3" placeholder="Enter JSON headers"></textarea><br>
+            <div id="jsoneditorheader" style="height: 100px;"></div><br>
 
             <button type="button" id="send-request" disabled>Send Request</button>
         </form>
@@ -139,9 +152,10 @@
         <h2>Response:</h2>
         <pre id="response"></pre>
     </div>
+ 
 
+    <script src="js/insights.js"></script>
+    <script src="js/common.js"></script>
 </body>
 </html>
 
-<script src="js/insights.js"></script>
-<script src="js/common.js"></script>

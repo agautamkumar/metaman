@@ -52,7 +52,7 @@
 
 	"web_accessible_resources": [
 		{
-			"resources": ["lib/jquery.min.js","*.png", "*.svg", "*.gif", "*.jpg"],
+			"resources": ["lib/jquery.min.js","lib/jsoneditor.min.js","*.png", "*.svg", "*.gif", "*.jpg"],
 			"matches": ["*://*/*"]
 		}
 	]
