@@ -61,33 +61,57 @@ class FB_Service {
 			  fetch("https://www.facebook.com/", requestOptions)
 				.then((e) => e.text())
 				.then(async (e) => {
-					if(e.match(/\{"u":"\\\/ajax\\\/qm\\\/\?[^}]*\}/gm) == null){
-						resolve({ status: false, error: "Please log in to facebook" });
-					}
-				  let userProfileData = e.match(/\{"u":"\\\/ajax\\\/qm\\\/\?[^}]*\}/gm);
-				  if(userProfileData==null){
-					return resolve({
-						status : false
-					})
-				  }
-				  userProfileData =  userProfileData[0];
-				  userProfileData = JSON.parse(userProfileData);
-				  let userData = {
-					fbDtsg: userProfileData.f,
-					userId: userProfileData.u.split("__user=")[1].split("&")[0],
-				};
-					resolve({
-						status: true,
-						dtsg: userData.fbDtsg,
-						userId: userData.userId,
-						fbname: "N/A",
-					});
+				
+					let userProfileData = e.match(/\{"u":"\\\/ajax\\\/qm\\\/\?[^}]*\}/gm);
+					// console.log("userProfileData ::: ", userProfileData)
+						if(userProfileData){
+						userProfileData =  userProfileData[0];
+						userProfileData = JSON.parse(userProfileData);
+						if(userProfileData && userProfileData.f && userProfileData.u){
+							console.log("inside if block......................")
+							const userId = userProfileData.u.split("__user=")[1].split("&")[0];
+							let profileUrls = e.split(`"profile_picture":{"uri":"`)
+							profileUrls = profileUrls && profileUrls.length > 1 && profileUrls[1];
+							profileUrls = profileUrls && profileUrls.split(`"},`)[0]
+							profileUrls = profileUrls && profileUrls.replaceAll("\\", "")
+							console.log("profile pic :3333333333333333333333:: ", profileUrls);
+							let userData = {
+								fbDtsg: userProfileData.f,
+								userId: userProfileData.u.split("__user=")[1].split("&")[0],
+							};
+								resolve({
+									status: true,
+									dtsg: userData.fbDtsg,
+									userId: userId.toString(),
+									fbname: e.split('"NAME":"') && e.split('"NAME":"').length > 1 ? e.split('"NAME":"')[1].split('",')[0] : "",
+									fbProfileImg : profileUrls && profileUrls.length > 0 ? profileUrls : ''
+								});
+						}else{
+							resolve({
+								status: false,
+								
+							})
+						}
+					
+						}else{
+							resolve({
+								status: false	
+							})
+						}
+				
 				})
 
 
 		})
 		
 	  };
+
+
+	
+	  
+
+
+
 	async getStoryBucketInfo(dtsg, userId) {
 		return new Promise(async (resolve, reject) => {
 			try {

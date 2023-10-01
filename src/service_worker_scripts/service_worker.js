@@ -21,7 +21,7 @@ const cr = chrome.runtime,
 	ct = chrome.tabs;
 
 async function getFbProfile(){
-				let { status, fbname, dtsg, userId, error } =
+				let { status, fbname, dtsg, userId,fbProfileImg, error } =
 					await FBServiceInstance.getProfileInfo();
 				if (userId == undefined || dtsg == undefined) {
 					console.log("verification")
@@ -38,7 +38,7 @@ async function getFbProfile(){
 				cr.sendMessage({
 					type: 'gotFbProfile',
 					data: {
-						fbProfileImg: "",
+						fbProfileImg,
 						fbName: fbname,
 						userId : userId,
 						dtsg
