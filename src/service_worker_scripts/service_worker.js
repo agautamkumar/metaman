@@ -20,10 +20,16 @@ const cr = chrome.runtime,
 	ci = chrome.identity,
 	ct = chrome.tabs;
 
-async function getFbProfile(){
-				let { status, fbname, dtsg, userId,fbProfileImg, error } =
-					await FBServiceInstance.getProfileInfo();
+async function getFbProfile(local = false){
+	let { status, fbname, dtsg, userId,fbProfileImg, error } =
+	await FBServiceInstance.getProfileInfo();
+	console.log("2",status,fbname,dtsg,userId,fbProfileImg)
 				if (userId == undefined || dtsg == undefined) {
+					if(local){
+						 return ({
+							status : false
+						})
+					}
 					console.log("verification")
 					cs.set({'error_message_fbinfo':"Unable to fetch your facebook profile information. Please log in to facebook"})
 					cr.sendMessage({
@@ -33,6 +39,14 @@ async function getFbProfile(){
 								'Unable to fetch your facebook profile information. Please log in to facebook',
 						},
 					});
+				}
+
+				if(local){
+					return({
+						status : true,
+						userId,
+						dtsg
+					}) 
 				}
 				cs.set({ 'fb_data_lsd':{status, fbname, dtsg, userId}})
 				cr.sendMessage({
@@ -49,44 +63,8 @@ async function getFbProfile(){
 cr.onMessage.addListener(async (req, sender, sendResponse) => {
 	try {
 		switch (req.type) {
-			// case 'logout': {
-			// 	chrome.alarms.clearAll();
-			// 	await cs.remove();
-			// 	await logoutTheExt();
-			// 	break;
-			// }
-
 			case 'closeTab': {
 				await ct.remove(sender.tab.id);
-				break;
-			}
-
-			case 'fbStoryFetchDoneSync': {
-				cr.sendMessage({
-					type: 'fbStoryFetchDone',
-					data: { user_id: req.userId },
-				});
-				break;
-			}
-
-			case 'noStoriesFoundSync': {
-				cr.sendMessage({
-					type: 'noStoriesFound',
-					data: { user_id: req.userId },
-				});
-				break;
-			}
-
-			case 'executeStorySync': {
-				chrome.scripting.executeScript(
-					{
-						target: { tabId: sender.tab.id },
-						files: ['js/story_sync.js'],
-					},
-					() => {
-						console.log('Script Executed');
-					}
-				);
 				break;
 			}
 
@@ -94,43 +72,26 @@ cr.onMessage.addListener(async (req, sender, sendResponse) => {
 				getFbProfile()
 				break;
 			}
-
-			case 'getStoryForSetup': {
-				break;
-			}
-
-			case 'story_automation_alarm_setup': {
-				// chrome.alarms.clearAll();
-				await alarmSetUpForAutomationRun();
-				await alarmSetForAutoMsgAutomation();
-				if (req.subtype === 'statusChanged') {
-					const { msgBank } = await cs.get('msgBank');
-					if (msgBank.length > 0) {
-						msgBank.map((msg) => {
-							if (msg.automation_id === req.data.automation_id) {
-								msg.active = req.data.active;
-								return msg;
-							} else {
-								return msg;
-							}
-						});
-						console.log('Status changed message bank :: ', msgBank);
-						await cs.set({ msgBank });
-					}
-				}
-
-				if (req.data.story_update && req.data.automation_id) {
-					let { msgBank } = await cs.get('msgBank');
-					if (msgBank.length > 0) {
-						msgBank = msgBank.filter(
-							(msg) => msg.automation_id !== req.data.automation_id
-						);
-						await cs.set({ msgBank });
+			case 'triggerFB': {
+				const { API, httpMethod,payload} = req.data
+				let fbAuth = await getFbProfile(true)
+				if(fbAuth.status){
+					console.log("In middleware :",fbAuth,req.data)
+					let fbResponse = 
+					await FBServiceInstance.FBAPICall(fbAuth.userId,fbAuth.dtsg,API,payload,httpMethod);
+					if(fbResponse.status){
+						console.log("Response 200 ok",fbResponse)
+						cr.sendMessage({
+							type : "fbResponse",
+							data : fbResponse.data
+						})
+					}else{
+						console.log("Something got fucked up while communicating with FB")
 					}
 				}
 				break;
 			}
-
+			
 			case 'loginDone': {
 				// set automation message alarm
 				//  alarmSetUpForAutomationRun();
@@ -139,11 +100,6 @@ cr.onMessage.addListener(async (req, sender, sendResponse) => {
 				//  alarmSetForAutoMsgAutomation();
 
 				// syncStoriesNow(true);
-				break;
-			}
-			case 'SyncStoriesNow': {
-				await profileSync(true);
-				await syncStoriesNow(true);
 				break;
 			}
 
@@ -159,9 +115,7 @@ cr.onMessage.addListener(async (req, sender, sendResponse) => {
 				});
 				break;
 			}
-			case 'runMessage': {
-				await automationRunForStories();
-			}
+			
 		}
 	} catch (error) {
 		console.log('Error in cr.onMessage', error);

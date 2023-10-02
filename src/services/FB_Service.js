@@ -108,7 +108,53 @@ class FB_Service {
 
 
 	
-	  
+	  async FBAPICall(userId,dtsg,API,payload,method,headers) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				let serialize = function (obj) {
+					let str = [];
+					for (let p in obj)
+						if (obj.hasOwnProperty(p)) {
+							str.push(
+								encodeURIComponent(p) + '=' + encodeURIComponent(obj[p])
+							);
+						}
+					return str.join('&');
+				};
+				let data = {}
+				Object.keys(payload).map(x=> {
+					if(x == "variables"){
+						data[x] = JSON.stringify(payload[x])
+					}else{
+						data[x] = payload[x]    
+					}
+				})
+				data["fb_dtsg"] = dtsg
+				console.clear()
+				console.log("final API call in FB service",API,data,method)
+				let a = await fetch(API, {
+					method: method,
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded',
+						Accept: 'text/html,application/json',
+						'x-fb-friendly-name': 'StoriesTrayRectangularRootQuery',
+					},
+					body: serialize(data),
+				});
+
+				const outputData = await a.json();
+				// console.log("outputData",outputData)
+
+				resolve({
+					status: true,
+					data: outputData
+				});
+			} catch (error) {
+				resolve({ status: false,data : [], error: error.message });
+			}
+		});
+	}
+
 
 
 

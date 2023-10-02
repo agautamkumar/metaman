@@ -14,6 +14,7 @@
 
         .container {
             max-width: 1400px;
+            display: block;
             margin: 0 auto;
             padding: 20px;
             background-color: #fff;
@@ -106,13 +107,50 @@
             vertical-align: middle;
             margin-right: 10px; /* Adjust the spacing between the logo and text */
         }
+                /* CSS for the loader */
+        .loader {
+            /* Center the loader in the middle of the screen */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 999;
+            display: none;
+        }
+
+        .loader img {
+            /* Center the GIF inside the loader container */
+            display: block;
+            margin: 0 auto;
+        }
+
+        .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+        z-index: 998; /* Below the loader, but above the content */
+        display: block;
+    }
+        /* Additional CSS styles for the MetaMan UI can be added here */
+        .metaman-container {
+            /* Your MetaMan UI styles */
+        }
+
+        /* Add more styles for your MetaMan UI elements as needed */
+
     </style>
 
 </head>
 <body>
 
+    <div class="loader" id="loader">
+        <!-- <img src="./images/rl2.gif" alt="Loading..."> -->
+    </div>
     <div class="container">
-        
+   
         <h1>
             <img src="./logo/32.png" alt="Logo" class="logo">
             MetaMan
@@ -145,11 +183,13 @@
             <!-- JSONEditor container for Request Headers -->
             <!-- <label for="request-headers">Request Headers (JSON):</label>
             <div id="request-headers-editor" style="height: 100px;"></div><br> -->
-            <label for="request-headers">Request Headers (JSON):</label>
-            <div id="jsoneditorheader" style="height: 150px;"></div><br>
+            <!-- <label for="request-headers">Request Headers (JSON):</label>
+            <div id="jsoneditorheader" style="height: 150px;"></div><br> -->
 
             <label for="request-payload">Request Payload (JSON):</label>
             <div id="jsoneditor" style="height: 400px;"></div>
+
+
             <!-- <textarea id="request-payload" rows="6" placeholder="Enter JSON payload"></textarea><br> -->
             <span class="error-message" id="payload-error"></span><br>
 
@@ -161,7 +201,7 @@
  
 
         <h2>Response:</h2>
-        <pre id="response" style="height: 400px;"></pre>
+        <div id="jsonresponse" style="height: 400px;"></div>
     </div>
  
 
