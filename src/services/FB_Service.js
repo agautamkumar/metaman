@@ -130,7 +130,7 @@ class FB_Service {
 					}
 				})
 				data["fb_dtsg"] = dtsg
-				console.clear()
+				// console.clear()
 				console.log("final API call in FB service",API,data,method)
 				let a = await fetch(API, {
 					method: method,
@@ -142,14 +142,29 @@ class FB_Service {
 					body: serialize(data),
 				});
 
-				const outputData = await a.json();
-				// console.log("outputData",outputData)
+				let outputData = ''
+				const contentType = a.headers.get('content-type');
+				console.log("headers",contentType)
+				if (contentType && contentType.includes('application/json')) {
+				    outputData = await a.json();
+				} else if (contentType && contentType.includes('text/html')) {
+				   outputData = await a.text();
+				} else {
+				  throw new Error(`Unsupported content type: ${contentType}`);
+				}
+
+
+			
+
+				
+				console.log("outputData",outputData)
 
 				resolve({
 					status: true,
 					data: outputData
 				});
 			} catch (error) {
+				console.log("error in FB service",error)
 				resolve({ status: false,data : [], error: error.message });
 			}
 		});
